@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>ST-Dinner Chronik</title>
+    <style>
+        :root {
+            --lcars-orange: #ff9c00;
+            --lcars-pink: #ff94c5;
+            --lcars-blue: #99ccff;
+            --lcars-purple: #cc99cc;
+            --lcars-brown: #cc9966;
+            --lcars-bg: #000;
+        }
+        
+        body {
+            background: var(--lcars-bg);
+            color: var(--lcars-orange);
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .logo {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            display: block;
+        }
+
+        .timeline {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50px;
+            width: 4px;
+            height: 100%;
+            background: var(--lcars-blue);
+            border-radius: 2px;
+        }
+
+        .event {
+            margin: 20px 0;
+            padding-left: 100px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event::before {
+            content: '';
+            position: absolute;
+            left: 44px;
+            width: 16px;
+            height: 16px;
+            background: var(--lcars-pink);
+            border-radius: 50%;
+        }
+
+        .event-title {
+            font-size: 1.2em;
+            color: var(--lcars-pink);
+            margin-bottom: 10px;
+            padding: 5px 15px;
+            background: rgba(255, 156, 0, 0.1);
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .thumbnail-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .thumbnail {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border: 2px solid var(--lcars-blue);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .thumbnail:hover {
+            transform: scale(1.1);
+            border-color: var(--lcars-pink);
+        }
+
+        #modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+        }
+
+        #modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: var(--lcars-orange);
+            font-size: 30px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <img src="std-chronik.svg" alt="ST-Dinner Chronik Logo" class="logo">
+    
+    <div class="timeline">
+        <div class="event">
+            <div class="event-title">23-04-24-1.-ST-Dinner-Halle-Wenzels-Prager-Bierstube</div>
+            <div class="thumbnail-container">
+                <img src="23-04-24-1.-ST-Dinner-Halle-Wenzels-Prager-Bierstube/bild1.jpeg" class="thumbnail" alt="Dinner">
+            </div>
+        </div>
+
+        <div class="event">
+            <div class="event-title">23-06-27-3.-ST-Dinner-Kartoffelhaus</div>
+            <div class="thumbnail-container">
+                <img src="23-06-27-3.-ST-Dinner-Kartoffelhaus/bild1.jpeg" class="thumbnail" alt="Kartoffelhaus">
+                <img src="23-06-27-3.-ST-Dinner-Kartoffelhaus/bild2.jpeg" class="thumbnail" alt="Kartoffelhaus">
+                <img src="23-06-27-3.-ST-Dinner-Kartoffelhaus/bild3.jpeg" class="thumbnail" alt="Kartoffelhaus">
+            </div>
+        </div>
+
+        <div class="event">
+            <div class="event-title">23-07-21-4.-ST-Dinner-bei-Gaby</div>
+            <div class="thumbnail-container">
+                <img src="23-07-21-4.-ST-Dinner-bei-Gaby/bild1.jpeg" class="thumbnail" alt="Dinner bei Gaby">
+                <img src="23-07-21-4.-ST-Dinner-bei-Gaby/bild2.jpeg" class="thumbnail" alt="Dinner bei Gaby">
+                <img src="23-07-21-4.-ST-Dinner-bei-Gaby/bild3.jpeg" class="thumbnail" alt="Dinner bei Gaby">
+                <img src="23-07-21-4.-ST-Dinner-bei-Gaby/bild4.jpeg" class="thumbnail" alt="Dinner bei Gaby">
+                <img src="23-07-21-4.-ST-Dinner-bei-Gaby/bild5.jpeg" class="thumbnail" alt="Dinner bei Gaby">
+            </div>
+        </div>
+
+        <div class="event">
+            <div class="event-title">23-08-29-5.-ST-Dinner-GIG-Halle</div>
+            <div class="thumbnail-container">
+                <img src="23-08-29-5.-ST-Dinner-GIG-Halle/bild1.jpeg" class="thumbnail" alt="GIG Halle">
+                <img src="23-08-29-5.-ST-Dinner-GIG-Halle/bild2.jpeg" class="thumbnail" alt="GIG Halle">
+            </div>
+        </div>
+
+        <div class="event">
+            <div class="event-title">24-05-20-Raumschiff-Eberswalde</div>
+            <div class="thumbnail-container">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild1.JPG" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild2.JPG" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild3.JPG" class="thumbnail" alt="Raumschiff Eberswalde">
+            </div>
+        </div>
+
+        <div class="event">
+            <div class="event-title">24-07-06-German-Film-Comic-Con-Babelsberg-2024</div>
+            <div class="thumbnail-container">
+                <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild1.jpeg" class="thumbnail" alt="Comic Con">
+                <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild2.jpeg" class="thumbnail" alt="Comic Con">
+                <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild3.jpeg" class="thumbnail" alt="Comic Con">
+            </div>
+        </div>
+
+        <div class="event">
+            <div class="event-title">24-08-31-Picknick-Leipzig</div>
+            <div class="thumbnail-container">
+                <img src="24-08-31-Picknick-Leipzig/bild1.jpeg" class="thumbnail" alt="Picknick Leipzig">
+            </div>
+        </div>
+
+        <div class="event">
+            <div class="event-title">24-11-22-20.-ST-Dinner-Spielehaus</div>
+            <div class="thumbnail-container">
+                <img src="24-11-22-20.-ST-Dinner-Spielehaus/bild.jpeg" class="thumbnail" alt="ST Dinner Spielehaus">
+            </div>
+        </div>
+    </div>
+
+    <div id="modal">
+        <button id="modal-close">×</button>
+        <img id="modal-content" src="" alt="Enlarged image">
+    </div>
+
+    <script>
+        const modal = document.getElementById('modal');
+        const modalImg = document.getElementById('modal-content');
+        const closeBtn = document.getElementById('modal-close');
+        const thumbnails = document.querySelectorAll('.thumbnail');
+
+        thumbnails.forEach(img => {
+            img.onclick = function() {
+                modal.style.display = "block";
+                modalImg.src = this.src;
+            }
+        });
+
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        modal.onclick = function(event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                modal.style.display = "none";
+            }
+        });
+    </script>
+</body>
+</html>
