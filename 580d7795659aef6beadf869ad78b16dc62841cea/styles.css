@@ -1,0 +1,208 @@
+        :root {
+            --lcars-turquoise: #004142;
+            --lcars-dark-turquoise: #004142;
+            --lcars-orange: #f4a007;
+            --lcars-black: #000000;
+            --lcars-white: #FFFFFF;
+        }
+        
+        body {
+            background: var(--lcars-black);
+		    color: var(--lcars-white);
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+		.scrolling-background {
+			position: fixed;
+			bottom: 0;
+			right: 0;
+			width: 300px; /* Breite des Hintergrundbildes */
+			height: 200px; /* Höhe des Hintergrundbildes */
+			background-image: url('picard10vorne.jpg0');
+			background-size: contain;
+			background-repeat: no-repeat;
+			background-position: bottom right;
+
+			/* Transparenz-Gradient für rechte Seite */
+			-webkit-mask-image: linear-gradient(to right, black 70%, transparent 100%);
+			mask-image: linear-gradient(to right, black 70%, transparent 100%);
+
+			/* Optional: Übergangseffekt für sanfte Transparenz */
+			transition: opacity 0.3s ease;
+		}
+
+
+        .logo {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            display: block;
+        }
+
+        .timeline {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+			background-color: rgba(0,0,0,0.8)}
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50px;
+            width: 4px;
+            height: 100%;
+            background: var(--lcars-turquoise);
+            border-radius: 2px;
+        }
+
+        .event {
+	margin-top: 28px;
+	margin-right: 0;
+	margin-left: 0;
+	margin-bottom: 40px;
+	padding-left: 100px;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+        }
+
+        .event::before {
+            content: '';
+            position: absolute;
+            left: 44px;
+            width: 16px;
+            height: 16px;
+            background: var(--lcars-orange);
+            border-radius: 50%;
+			margin-top: 8px;
+        }
+
+        .event-title {
+            font-size: 1.2em;
+            color: var(--lcars-white);
+            margin-bottom: 10px;
+            padding: 5px 15px;
+            background: var(--lcars-dark-turquoise);
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .event-date {
+            color: var(--lcars-orange);
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .thumbnail-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+.tn1 { margin-left: 15px;}
+        .thumbnail {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border: 2px solid var(--lcars-turquoise);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .thumbnail:hover {
+            transform: scale(1.1);
+            border-color: var(--lcars-orange);
+        }
+
+        #modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+        }
+
+        #modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+			border: 2px solid var(--lcars-turquoise);
+			border-radius: 20px;
+        }
+
+        #modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: var(--lcars-orange);
+            font-size: 30px;
+            cursor: pointer;
+            background: var(--lcars-dark-turquoise);
+            border: none;
+            padding: 10px;
+        }
+
+
+#modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    background-color: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+}
+
+#modal-content {
+    max-width: 80%;
+    max-height: 80%;
+}
+
+#modal-prev,
+#modal-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--lcars-dark-turquoise);
+    color: var(--lcars-orange);
+    border: none;
+    font-size: 2em;
+    padding: 0.5em;
+    cursor: pointer;
+	border-radius: 20px;
+}
+
+#modal-prev {
+    left: 5%;
+}
+
+#modal-next {
+    right: 5%;
+}
+
+#modal-close {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    border: none;
+    font-size: 2em;
+    cursor: pointer;
+	border-radius: 20px;
+}
+
+.event-content {
+	margin-left: 18px;
+	font-size: 0.9em;
+}
