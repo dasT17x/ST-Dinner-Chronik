@@ -3,136 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>ST-Dinner Chronik</title>
-    <style>
-        :root {
-            --lcars-turquoise: #004142;
-            --lcars-dark-turquoise: #004142;
-            --lcars-orange: #f4a007;
-            --lcars-black: #000000;
-            --lcars-white: #FFFFFF;
-        }
-        
-        body {
-            background: var(--lcars-black);
-            color: var(--lcars-white);
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .logo {
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto 40px;
-            display: block;
-        }
-
-        .timeline {
-            max-width: 1200px;
-            margin: 0 auto;
-            position: relative;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 50px;
-            width: 4px;
-            height: 100%;
-            background: var(--lcars-turquoise);
-            border-radius: 2px;
-        }
-
-        .event {
-            margin: 20px 0;
-            padding-left: 100px;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .event::before {
-            content: '';
-            position: absolute;
-            left: 44px;
-            width: 16px;
-            height: 16px;
-            background: var(--lcars-orange);
-            border-radius: 50%;
-        }
-
-        .event-title {
-            font-size: 1.2em;
-            color: var(--lcars-white);
-            margin-bottom: 10px;
-            padding: 5px 15px;
-            background: var(--lcars-dark-turquoise);
-            border-radius: 20px;
-            display: inline-block;
-        }
-
-        .event-date {
-            color: var(--lcars-orange);
-            font-weight: bold;
-            margin-right: 10px;
-        }
-
-        .thumbnail-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .thumbnail {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border: 2px solid var(--lcars-turquoise);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .thumbnail:hover {
-            transform: scale(1.1);
-            border-color: var(--lcars-orange);
-        }
-
-        #modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 1000;
-        }
-
-        #modal-content {
-            max-width: 90%;
-            max-height: 90%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        #modal-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            color: var(--lcars-orange);
-            font-size: 30px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            padding: 10px;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="styles.css"/>
 </head>
 <body>
+	<div class="scrolling-background"></div>
+	 
     <img src="std-chronik.svg" alt="ST-Dinner Chronik Logo" class="logo">
     <div class="timeline">
         <div class="event">
@@ -140,8 +15,12 @@
                 <span class="event-date">05.04.2023</span>
                 First Contact Day – Gründung online
             </div>
+			<div class="event-content">
+              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+
+          </div>
             <div class="thumbnail-container">
-                <img src="23-04-05-First-Contact-Day-Gruendung-online/bild1.jpeg" class="thumbnail" alt="First Contact Day">
+                <img src="23-04-05-First-Contact-Day-Gruendung-online/bild1.jpeg" class="thumbnail tn1" alt="First Contact Day">
                 <img src="23-04-05-First-Contact-Day-Gruendung-online/bild2.jpeg" class="thumbnail" alt="First Contact Day">
             </div>
         </div>
@@ -152,7 +31,7 @@
                 1. STAR TREK Dinner – Halle / Wenzels Prager Bierstuben
             </div>
             <div class="thumbnail-container">
-                <img src="23-04-24-1.-ST-Dinner-Halle-Wenzels-Prager-Bierstube/bild1.jpeg" class="thumbnail" alt="Dinner">
+                <img src="23-04-24-1.-ST-Dinner-Halle-Wenzels-Prager-Bierstube/bild1.jpeg" class="thumbnail tn1" alt="Dinner">
             </div>
         </div>
 
@@ -162,7 +41,7 @@
                 2. STAR TREK Dinner – Leipzig / bei Gaby
             </div>
             <div class="thumbnail-container">
-                <img src="23-05-27-2.-ST-Dinner-bei-Gaby/bild1.jpeg" class="thumbnail" alt="Dinner bei Gaby">
+                <img src="23-05-27-2.-ST-Dinner-bei-Gaby/bild1.jpeg" class="thumbnail tn1" alt="Dinner bei Gaby">
             </div>
         </div>
 
@@ -172,7 +51,7 @@
                 3. STAR TREK Dinner – Halle / Kartoffelhaus
             </div>
             <div class="thumbnail-container">
-                <img src="23-06-27-3.-ST-Dinner-Kartoffelhaus/bild1.jpeg" class="thumbnail" alt="Kartoffelhaus">
+                <img src="23-06-27-3.-ST-Dinner-Kartoffelhaus/bild1.jpeg" class="thumbnail tn1" alt="Kartoffelhaus">
                 <img src="23-06-27-3.-ST-Dinner-Kartoffelhaus/bild2.jpeg" class="thumbnail" alt="Kartoffelhaus">
                 <img src="23-06-27-3.-ST-Dinner-Kartoffelhaus/bild3.jpeg" class="thumbnail" alt="Kartoffelhaus">
             </div>
@@ -184,7 +63,7 @@
                 4. STAR TREK Dinner – Leipzig / bei Gaby
             </div>
             <div class="thumbnail-container">
-                <img src="23-07-21-4.-ST-Dinner-bei-Gaby/bild1.jpeg" class="thumbnail" alt="Dinner bei Gaby">
+                <img src="23-07-21-4.-ST-Dinner-bei-Gaby/bild1.jpeg" class="thumbnail tn1" alt="Dinner bei Gaby">
                 <img src="23-07-21-4.-ST-Dinner-bei-Gaby/bild2.jpeg" class="thumbnail" alt="Dinner bei Gaby">
                 <img src="23-07-21-4.-ST-Dinner-bei-Gaby/bild3.jpeg" class="thumbnail" alt="Dinner bei Gaby">
                 <img src="23-07-21-4.-ST-Dinner-bei-Gaby/bild4.jpeg" class="thumbnail" alt="Dinner bei Gaby">
@@ -198,7 +77,7 @@
                 5. STAR TREK Dinner – Halle / GiG
             </div>
             <div class="thumbnail-container">
-                <img src="23-08-29-5.-ST-Dinner/bild1.jpg" class="thumbnail" alt="GIG Halle">
+                <img src="23-08-29-5.-ST-Dinner/bild1.jpg" class="thumbnail tn1" alt="GIG Halle">
                 <img src="23-08-29-5.-ST-Dinner/bild2.jpg" class="thumbnail" alt="GIG Halle">
             </div>
         </div>
@@ -209,7 +88,7 @@
                 10. STAR TREK Dinner – Leipzig / bei Gaby
             </div>
             <div class="thumbnail-container">
-                <img src="24-01-15-10.-ST-Dinner-bei-Gaby/bild1.jpeg" class="thumbnail" alt="Dinner bei Gaby">
+                <img src="24-01-15-10.-ST-Dinner-bei-Gaby/bild1.jpeg" class="thumbnail tn1" alt="Dinner bei Gaby">
                 <img src="24-01-15-10.-ST-Dinner-bei-Gaby/bild2.jpeg" class="thumbnail" alt="Dinner bei Gaby">
                 <img src="24-01-15-10.-ST-Dinner-bei-Gaby/bild3.jpeg" class="thumbnail" alt="Dinner bei Gaby">
                 <img src="24-01-15-10.-ST-Dinner-bei-Gaby/bild4.jpeg" class="thumbnail" alt="Dinner bei Gaby">
@@ -224,7 +103,7 @@
                 Raumschiff Eberswalde
             </div>
             <div class="thumbnail-container">
-                <img src="24-05-20-Raumschiff-Eberswalde/bild1.JPG" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild1.JPG" class="thumbnail tn1" alt="Raumschiff Eberswalde">
                 <img src="24-05-20-Raumschiff-Eberswalde/bild2.JPG" class="thumbnail" alt="Raumschiff Eberswalde">
                 <img src="24-05-20-Raumschiff-Eberswalde/bild3.JPG" class="thumbnail" alt="Raumschiff Eberswalde">
             </div>
@@ -236,7 +115,7 @@
                 German Film Comic Con Babelsberg 2024
             </div>
             <div class="thumbnail-container">
-                <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild1.jpeg" class="thumbnail" alt="Comic Con">
+                <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild1.jpeg" class="thumbnail tn1" alt="Comic Con">
                 <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild2.jpeg" class="thumbnail" alt="Comic Con">
                 <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild3.jpeg" class="thumbnail" alt="Comic Con">
             </div>
@@ -248,7 +127,7 @@
                 17. STAR TREK Dinner – Leipzig / Picknick 
             </div>
             <div class="thumbnail-container">
-                <img src="24-08-31-Picknick-Leipzig/bild1.jpeg" class="thumbnail" alt="Picknick Leipzig">
+                <img src="24-08-31-Picknick-Leipzig/bild1.jpeg" class="thumbnail tn1" alt="Picknick Leipzig">
             </div>
         </div>
 
@@ -258,7 +137,7 @@
                 19. STAR TREK Dinner – Leipzig / bei Gaby
             </div>
             <div class="thumbnail-container">
-                <img src="24-10-19-19.-ST-Dinner-bei-Gaby/bild1.jpeg" class="thumbnail" alt="Dinner bei Gaby">
+                <img src="24-10-19-19.-ST-Dinner-bei-Gaby/bild1.jpeg" class="thumbnail tn1" alt="Dinner bei Gaby">
                 <img src="24-10-19-19.-ST-Dinner-bei-Gaby/bild2.jpeg" class="thumbnail" alt="Dinner bei Gaby">
             </div>
         </div>
@@ -269,42 +148,77 @@
                 20. STAR TREK Dinner – Halle / Spielehaus
             </div>
             <div class="thumbnail-container">
-                <img src="24-11-22-20.-ST-Dinner-Spielehaus/bild.jpeg" class="thumbnail" alt="ST Dinner Spielehaus">
+                <img src="24-11-22-20.-ST-Dinner-Spielehaus/bild.jpeg" class="thumbnail tn1" alt="ST Dinner Spielehaus">
             </div>
         </div>
-    </div>
+    </div>    </div>
 
     <div id="modal">
-        <button id="modal-close">×</button>
+        <button id="modal-prev">🡄</button>
         <img id="modal-content" src="" alt="Enlarged image">
+        <button id="modal-next">🡆</button>
+        <button id="modal-close">×</button>
     </div>
+	
 
     <script>
         const modal = document.getElementById('modal');
         const modalImg = document.getElementById('modal-content');
         const closeBtn = document.getElementById('modal-close');
+        const prevBtn = document.getElementById('modal-prev');
+        const nextBtn = document.getElementById('modal-next');
         const thumbnails = document.querySelectorAll('.thumbnail');
 
+        let currentGallery = [];
+        let currentIndex = 0;
+
+        // Öffnet das Modal und initialisiert die Galerie
         thumbnails.forEach(img => {
             img.onclick = function() {
+                const gallery = this.closest('.thumbnail-container');
+                currentGallery = Array.from(gallery.querySelectorAll('.thumbnail')).map(img => img.src);
+                currentIndex = currentGallery.indexOf(this.src);
+
                 modal.style.display = "block";
                 modalImg.src = this.src;
-            }
+            };
         });
 
+        // Schließt das Modal
         closeBtn.onclick = function() {
             modal.style.display = "none";
-        }
+        };
 
         modal.onclick = function(event) {
             if (event.target === modal) {
                 modal.style.display = "none";
             }
-        }
+        };
 
+        // Zeigt das vorherige Bild
+        prevBtn.onclick = function() {
+            if (currentGallery.length > 0) {
+                currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
+                modalImg.src = currentGallery[currentIndex];
+            }
+        };
+
+        // Zeigt das nächste Bild
+        nextBtn.onclick = function() {
+            if (currentGallery.length > 0) {
+                currentIndex = (currentIndex + 1) % currentGallery.length;
+                modalImg.src = currentGallery[currentIndex];
+            }
+        };
+
+        // Schließen mit der Escape-Taste
         document.addEventListener('keydown', function(event) {
             if (event.key === "Escape") {
                 modal.style.display = "none";
+            } else if (event.key === "ArrowLeft") {
+                prevBtn.click();
+            } else if (event.key === "ArrowRight") {
+                nextBtn.click();
             }
         });
     </script>
