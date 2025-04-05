@@ -3,63 +3,342 @@
 <head>
     <meta charset="UTF-8">
     <title>ST-Dinner Chronik</title>
-    <link rel="stylesheet" type="text/css" href="styles.css"/>
+    <!-- Link zur externen CSS-Datei, falls vorhanden -->
+    <!-- <link rel="stylesheet" type="text/css" href="styles.css"/> -->
+    <style>
+        :root {
+            --lcars-turquoise: #004142;
+            --lcars-dark-turquoise: #004142; /* Gleicher Wert wie turquoise, ggf. anpassen */
+            --lcars-orange: #f4a007;
+            --lcars-black: #000000;
+            --lcars-white: #FFFFFF;
+        }
+
+        body {
+            background: var(--lcars-black);
+            color: var(--lcars-white);
+            font-family: 'Arial', sans-serif; /* LCARS-Schriftarten wären authentischer, aber Arial ist sicherer */
+            margin: 0;
+            padding: 20px;
+        }
+
+        .scrolling-background {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            width: 300px; /* Breite des Bildes */
+            height: 200px; /* Höhe des Bildes */
+            background-image: url('picard10vorne.jpg'); /* Korrigierter Pfad ohne die 0 am Ende */
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: bottom right;
+            /* Maske, um das Bild nach links auszublenden */
+            -webkit-mask-image: linear-gradient(to left, black 70%, transparent 100%);
+            mask-image: linear-gradient(to left, black 70%, transparent 100%);
+            transition: opacity 0.3s ease;
+            z-index: -1; /* Sicherstellen, dass es hinter dem Inhalt liegt */
+            opacity: 0.7; /* Leicht transparent, damit es nicht zu dominant ist */
+        }
+
+        .logo {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            display: block;
+        }
+
+        .timeline {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            background-color: rgba(0,0,0,0.8); /* Leicht transparenter Hintergrund für Lesbarkeit über dem Bild */
+            border-radius: 10px; /* Abgerundete Ecken */
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50px;
+            top: 0; /* Startet oben */
+            width: 4px;
+            height: 100%;
+            background: var(--lcars-turquoise);
+            border-radius: 2px;
+        }
+
+        .event {
+            /* margin-top: 28px; */ /* Entfernt für konsistentere Abstände */
+            /* margin-right: 0; */
+            /* margin-left: 0; */
+            margin-bottom: 40px;
+            padding-left: 100px; /* Genug Platz für den Punkt und die Linie */
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        /* Abstand für das erste Event */
+        .event:first-child {
+             margin-top: 20px;
+        }
+
+        .event::before {
+            content: '';
+            position: absolute;
+            left: 44px; /* (50px - 16px/2) = 42px, 44px sieht oft besser aus */
+            top: 8px; /* Vertikale Ausrichtung anpassen */
+            width: 16px;
+            height: 16px;
+            background: var(--lcars-orange);
+            border-radius: 50%;
+            z-index: 1; /* Über der Zeitlinie */
+        }
+
+        .event-title {
+            font-size: 1.2em;
+            color: var(--lcars-white);
+            margin-bottom: 10px;
+            padding: 5px 15px;
+            background: var(--lcars-dark-turquoise);
+            border-radius: 20px;
+            display: inline-block; /* Sorgt dafür, dass der Hintergrund nur so breit ist wie der Text */
+            max-width: calc(100% - 30px); /* Verhindert Überlappung mit dem Rand */
+        }
+
+        .event-date {
+            color: var(--lcars-orange);
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .thumbnail-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+            /* padding-left: 15px; */ /* Entfernt, da das .event schon padding hat */
+        }
+
+        .thumbnail {
+            width: 100px;
+            height: 100px;
+            object-fit: cover; /* Stellt sicher, dass das Bild den Bereich füllt, ohne verzerrt zu werden */
+            border: 2px solid var(--lcars-turquoise);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s; /* Sanfter Übergang */
+        }
+
+        .thumbnail:hover {
+            transform: scale(1.1);
+            border-color: var(--lcars-orange);
+        }
+
+        /* Modal-Styles */
+        #modal {
+            display: none; /* Standardmäßig ausgeblendet */
+            position: fixed; /* Bleibt an Ort und Stelle, auch beim Scrollen */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9); /* Dunkler, halbtransparenter Hintergrund */
+            z-index: 1000; /* Über allem anderen */
+            justify-content: center; /* Zentriert Inhalt horizontal */
+            align-items: center; /* Zentriert Inhalt vertikal */
+            flex-direction: column; /* Damit Buttons und Inhalt untereinander Platz finden */
+        }
+
+        #modal-content {
+            max-width: 90vw; /* Maximal 90% der Viewport-Breite */
+            max-height: 80vh; /* Maximal 80% der Viewport-Höhe (Platz für Buttons lassen) */
+            /* border: 2px solid var(--lcars-turquoise); */ /* Rahmen um das Bild/Video entfernt, stört oft */
+            /* border-radius: 20px; */ /* Ebenfalls entfernt */
+            display: flex; /* Wird verwendet, um das Bild/Video darin zu zentrieren */
+            justify-content: center;
+            align-items: center;
+            position: relative; /* Für die Positionierung der Buttons */
+        }
+
+        #modal-content img,
+        #modal-content video {
+             max-width: 100%; /* Stellt sicher, dass Inhalt nicht über Container hinausgeht */
+             max-height: 100%; /* Stellt sicher, dass Inhalt nicht über Container hinausgeht */
+             display: block; /* Verhindert unerwünschten Leerraum unter dem Bild */
+             border: 2px solid var(--lcars-turquoise); /* Rahmen hier direkt am Element */
+             border-radius: 10px; /* Leichter Radius */
+             object-fit: contain; /* Stellt sicher, dass das ganze Bild/Video sichtbar ist */
+        }
+
+
+        #modal-prev,
+        #modal-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--lcars-dark-turquoise);
+            color: var(--lcars-orange);
+            border: none;
+            font-size: 2em;
+            padding: 0.5em;
+            cursor: pointer;
+            border-radius: 50%; /* Rund machen */
+            width: 50px; /* Feste Breite */
+            height: 50px; /* Feste Höhe */
+            line-height: 1; /* Vertikale Ausrichtung des Textes */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        #modal-prev:hover,
+        #modal-next:hover {
+            opacity: 1;
+        }
+
+        #modal-prev {
+            left: 2%; /* Näher am Rand */
+        }
+
+        #modal-next {
+            right: 2%; /* Näher am Rand */
+        }
+
+        #modal-close {
+            position: absolute;
+            top: 1em;
+            right: 1em;
+            border: none;
+            font-size: 2em;
+            cursor: pointer;
+            border-radius: 50%; /* Rund */
+            background: var(--lcars-dark-turquoise);
+            color: var(--lcars-orange);
+            width: 40px; /* Feste Größe */
+            height: 40px; /* Feste Größe */
+            line-height: 1; /* Zentriert das 'x' */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0; /* Padding entfernen, da feste Größe */
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+         #modal-close:hover {
+             opacity: 1;
+         }
+
+
+        .event-content {
+            /* margin-left: 18px; */ /* Entfernt, da das .event schon padding hat */
+            font-size: 0.9em;
+            line-height: 1.6; /* Bessere Lesbarkeit */
+            margin-bottom: 15px; /* Abstand zum Thumbnail-Container */
+        }
+
+        /* Video-Thumbnail Container und Play-Button */
+        .video-thumbnail-container {
+            position: relative; /* Damit der Play-Button absolut positioniert werden kann */
+            display: inline-block; /* Passt sich der Größe des Bildes an */
+            cursor: pointer; /* Zeigt an, dass es klickbar ist */
+        }
+
+        .video-play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* Zentriert den Button über dem Thumbnail */
+            width: 40px;
+            height: 40px;
+            background-color: rgba(244, 160, 7, 0.8); /* LCARS Orange mit leichter Transparenz */
+            border-radius: 50%; /* Macht den Button rund */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none; /* Sorgt dafür, dass Klicks auf den Button durchgehen zum Container/Bild */
+            transition: background-color 0.3s;
+        }
+        /* Style Play-Dreieck mit CSS Borders */
+        .video-play-button::before {
+            content: '';
+            border-style: solid;
+            border-width: 10px 0 10px 16px; /* Erzeugt ein Dreieck */
+            border-color: transparent transparent transparent var(--lcars-dark-turquoise); /* Farbe des Dreiecks */
+            margin-left: 4px; /* Kleine Anpassung der Position */
+        }
+
+        /* Hover-Effekt für den Video-Container (hellt Button auf) */
+        .video-thumbnail-container:hover .video-play-button {
+            background-color: rgba(244, 160, 7, 1); /* Volle Deckkraft bei Hover */
+        }
+
+        /* Korrektur für doppelte Events am Ende */
+        .timeline > .event:nth-last-child(1),
+        .timeline > .event:nth-last-child(2) {
+           /* Hier könnten spezifische Styles stehen, wenn nötig, */
+           /* aber die Duplikate wurden im HTML entfernt. */
+        }
+
+    </style>
 </head>
 <body>
-    <div class="scrolling-background"></div>
-     
+    <!-- Logo -->
     <img src="std-chronik.svg" alt="ST-Dinner Chronik Logo" class="logo">
+
+    <!-- Timeline Container -->
     <div class="timeline">
+
+        <!-- Event 1 -->
         <div class="event">
             <div class="event-title">
                 <span class="event-date">05.04.2023</span>
                 First Contact Day – Gründung online
             </div>
             <div class="event-content">
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-          </div>
+              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.
+            </div>
             <div class="thumbnail-container">
                 <img src="23-04-05-First-Contact-Day-Gruendung-online/bild1.jpeg" class="thumbnail" alt="First Contact Day">
                 <img src="23-04-05-First-Contact-Day-Gruendung-online/bild2.jpeg" class="thumbnail" alt="First Contact Day">
             </div>
         </div>
 
+        <!-- Event 2 -->
         <div class="event">
             <div class="event-title">
                 <span class="event-date">24.04.2023</span>
                 1. STAR TREK Dinner – Halle / Wenzels Prager Bierstuben
             </div>
+             <div class="event-content">
+              <!-- Optional: Beschreibung hier einfügen -->
+            </div>
             <div class="thumbnail-container">
-                <img src="23-04-24-1.-ST-Dinner-Halle-Wenzels-Prager-Bierstube/bild1.jpeg" class="thumbnail" alt="Dinner">
+                <img src="23-04-24-1.-ST-Dinner-Halle-Wenzels-Prager-Bierstube/bild1.jpeg" class="thumbnail" alt="Dinner Halle">
             </div>
         </div>
 
+        <!-- Event 3 -->
         <div class="event">
             <div class="event-title">
                 <span class="event-date">27.05.2023</span>
                 2. STAR TREK Dinner – Leipzig / bei Gaby
+            </div>
+             <div class="event-content">
+              <!-- Optional: Beschreibung hier einfügen -->
             </div>
             <div class="thumbnail-container">
                 <img src="23-05-27-2.-ST-Dinner-bei-Gaby/bild1.jpeg" class="thumbnail" alt="Dinner bei Gaby">
             </div>
         </div>
 
-        <div class="event">
-            <div class="event-title">
-                <span class="event-date">27.06.2023</span>
-                3. STAR TREK Dinner – Halle / Kartoffelhaus
-            </div>
-            <div class="thumbnail-container">
-                <img src="23-06-27-3.-ST-Dinner-Kartoffelhaus/bild1.jpeg" class="thumbnail" alt="Kartoffelhaus">
-                <img src="23-06-27-3.-ST-Dinner-Kartoffelhaus/bild2.jpeg" class="thumbnail" alt="Kartoffelhaus">
-                <img src="23-06-27-3.-ST-Dinner-Kartoffelhaus/bild3.jpeg" class="thumbnail" alt="Kartoffelhaus">
-            </div>
-        </div>
-
+        <!-- Event 4 -->
         <div class="event">
             <div class="event-title">
                 <span class="event-date">21.07.2023</span>
                 4. STAR TREK Dinner – Leipzig / bei Gaby
+            </div>
+             <div class="event-content">
+              <!-- Optional: Beschreibung hier einfügen -->
             </div>
             <div class="thumbnail-container">
                 <img src="23-07-21-4.-ST-Dinner-bei-Gaby/bild1.jpeg" class="thumbnail" alt="Dinner bei Gaby">
@@ -70,10 +349,14 @@
             </div>
         </div>
 
+        <!-- Event 5 -->
         <div class="event">
             <div class="event-title">
                 <span class="event-date">29.08.2023</span>
                 5. STAR TREK Dinner – Halle / GiG
+            </div>
+             <div class="event-content">
+              <!-- Optional: Beschreibung hier einfügen -->
             </div>
             <div class="thumbnail-container">
                 <img src="23-08-29-5.-ST-Dinner/bild1.jpg" class="thumbnail" alt="GIG Halle">
@@ -81,10 +364,14 @@
             </div>
         </div>
 
+        <!-- Event 6 -->
         <div class="event">
             <div class="event-title">
                 <span class="event-date">15.01.2024</span>
                 10. STAR TREK Dinner – Leipzig / bei Gaby
+            </div>
+             <div class="event-content">
+              <!-- Optional: Beschreibung hier einfügen -->
             </div>
             <div class="thumbnail-container">
                 <img src="24-01-15-10.-ST-Dinner-bei-Gaby/bild1.jpeg" class="thumbnail" alt="Dinner bei Gaby">
@@ -96,66 +383,148 @@
             </div>
         </div>
 
+        <!-- Event 7 -->
         <div class="event">
             <div class="event-title">
                 <span class="event-date">20.05.2024</span>
                 Raumschiff Eberswalde
             </div>
+             <div class="event-content">
+              <!-- Optional: Beschreibung hier einfügen -->
+            </div>
             <div class="thumbnail-container">
-                <img src="24-05-20-Raumschiff-Eberswalde/bild1.JPG" class="thumbnail" alt="Raumschiff Eberswalde">
-                <img src="24-05-20-Raumschiff-Eberswalde/bild2.JPG" class="thumbnail" alt="Raumschiff Eberswalde">
-                <img src="24-05-20-Raumschiff-Eberswalde/bild3.JPG" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild01.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild02.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild03.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild04.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild05.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild06.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild07.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild08.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild09.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild10.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild11.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild12.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild13.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild14.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild15.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild16.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild17.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild18.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild19.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild20.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild21.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild22.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild23.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild24.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild25.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild26.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild27.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild28.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild29.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild31.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild32.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild33.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+                <img src="24-05-20-Raumschiff-Eberswalde/bild34.jpg" class="thumbnail" alt="Raumschiff Eberswalde">
+
+                <!-- Video Thumbnail -->
+                <div class="video-thumbnail-container">
+                    <img src="24-05-20-Raumschiff-Eberswalde/video1tn.jpg" class="thumbnail" alt="Video Raumschiff Eberswalde" data-video="24-05-20-Raumschiff-Eberswalde/video1.mp4">
+                    <div class="video-play-button"></div>
+                </div>
+
             </div>
         </div>
 
+        <!-- Event 8 -->
         <div class="event">
             <div class="event-title">
                 <span class="event-date">06.07.2024</span>
                 German Film Comic Con Babelsberg 2024
             </div>
+             <div class="event-content">
+              <!-- Optional: Beschreibung hier einfügen -->
+            </div>
             <div class="thumbnail-container">
-                <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild1.jpeg" class="thumbnail" alt="Comic Con">
-                <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild2.jpeg" class="thumbnail" alt="Comic Con">
-                <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild3.jpeg" class="thumbnail" alt="Comic Con">
+                <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild01.jpeg" class="thumbnail" alt="Comic Con">
+                <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild02.jpeg" class="thumbnail" alt="Comic Con">
+                <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild03.jpeg" class="thumbnail" alt="Comic Con">
+                <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild04.jpeg" class="thumbnail" alt="Comic Con">
+                <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild05.jpeg" class="thumbnail" alt="Comic Con">
+                <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild06.jpeg" class="thumbnail" alt="Comic Con">
+                <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild07.jpeg" class="thumbnail" alt="Comic Con">
+                <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild08.jpeg" class="thumbnail" alt="Comic Con">
+                <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild09.jpeg" class="thumbnail" alt="Comic Con">
+                <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild10.jpeg" class="thumbnail" alt="Comic Con">
+                <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild11.jpeg" class="thumbnail" alt="Comic Con">
+                <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild12.jpeg" class="thumbnail" alt="Comic Con">
+                <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild13.jpeg" class="thumbnail" alt="Comic Con">
+                <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild14.jpeg" class="thumbnail" alt="Comic Con">
+                <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild15.jpeg" class="thumbnail" alt="Comic Con">
+                <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild16.jpeg" class="thumbnail" alt="Comic Con">
+                <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild17.jpeg" class="thumbnail" alt="Comic Con">
+                <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild18.jpeg" class="thumbnail" alt="Comic Con">
+                <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/bild19.jpeg" class="thumbnail" alt="Comic Con">
+
+                <!-- Video Thumbnails -->
+                <div class="video-thumbnail-container">
+                    <img src="24-07-06-German-Film-Comic-Con-Babelsberg-2024/video1tn.jpg" class="thumbnail" alt="Video 1 bei Gaby" data-video="24-07-06-German-Film-Comic-Con-Babelsberg-2024/video1.mp4">
+                    <div class="video-play-button"></div>
+                </div>
             </div>
         </div>
 
+        <!-- Event 9 -->
         <div class="event">
             <div class="event-title">
                 <span class="event-date">31.08.2024</span>
-                17. STAR TREK Dinner – Leipzig / Picknick 
+                17. STAR TREK Dinner – Leipzig / Picknick
+            </div>
+             <div class="event-content">
+              <!-- Optional: Beschreibung hier einfügen -->
             </div>
             <div class="thumbnail-container">
                 <img src="24-08-31-Picknick-Leipzig/bild1.jpeg" class="thumbnail" alt="Picknick Leipzig">
             </div>
         </div>
 
+        <!-- Event 10 -->
         <div class="event">
             <div class="event-title">
                 <span class="event-date">19.10.2024</span>
                 19. STAR TREK Dinner – Leipzig / bei Gaby
+            </div>
+             <div class="event-content">
+              <!-- Optional: Beschreibung hier einfügen -->
             </div>
             <div class="thumbnail-container">
                 <img src="24-10-19-19.-ST-Dinner-bei-Gaby/bild1.jpeg" class="thumbnail" alt="Dinner bei Gaby">
                 <img src="24-10-19-19.-ST-Dinner-bei-Gaby/bild2.jpeg" class="thumbnail" alt="Dinner bei Gaby">
             </div>
         </div>
-       
+
+        <!-- Event 11 -->
         <div class="event">
             <div class="event-title">
                 <span class="event-date">22.11.2024</span>
                 20. STAR TREK Dinner – Halle / Spielehaus
             </div>
+             <div class="event-content">
+              <!-- Optional: Beschreibung hier einfügen -->
+            </div>
             <div class="thumbnail-container">
                 <img src="24-11-22-20.-ST-Dinner-Spielehaus/bild.jpeg" class="thumbnail" alt="ST Dinner Spielehaus">
             </div>
         </div>
-        
-        <!-- Neues Event: 24-12-13-21.-ST-Dinner-bei-Gaby -->
+
+        <!-- Event 12 -->
         <div class="event">
             <div class="event-title">
                 <span class="event-date">13.12.2024</span>
                 21. STAR TREK Dinner – bei Gaby
+            </div>
+             <div class="event-content">
+              <!-- Optional: Beschreibung hier einfügen -->
             </div>
             <div class="thumbnail-container">
                 <img src="24-12-13-21.-ST-Dinner-bei-Gaby/bild01.jpeg" class="thumbnail" alt="Dinner bei Gaby">
@@ -176,14 +545,28 @@
                 <img src="24-12-13-21.-ST-Dinner-bei-Gaby/bild16.jpeg" class="thumbnail" alt="Dinner bei Gaby">
                 <img src="24-12-13-21.-ST-Dinner-bei-Gaby/bild17.jpeg" class="thumbnail" alt="Dinner bei Gaby">
                 <img src="24-12-13-21.-ST-Dinner-bei-Gaby/bild18.jpeg" class="thumbnail" alt="Dinner bei Gaby">
+
+                <!-- Video Thumbnails -->
+                <div class="video-thumbnail-container">
+                    <img src="24-12-13-21.-ST-Dinner-bei-Gaby/video1tn.jpg" class="thumbnail" alt="Video 1 bei Gaby" data-video="24-12-13-21.-ST-Dinner-bei-Gaby/video1.mp4">
+                    <div class="video-play-button"></div>
+                </div>
+                <div class="video-thumbnail-container">
+                    <img src="24-12-13-21.-ST-Dinner-bei-Gaby/video2tn.jpg" class="thumbnail" alt="Video 2 bei Gaby" data-video="24-12-13-21.-ST-Dinner-bei-Gaby/video2.mp4">
+                    <div class="video-play-button"></div>
+                </div>
+
             </div>
         </div>
-        
-        <!-- Neues Event: 25-02-15-Nova-Con -->
+
+        <!-- Event 13: Nova-Con -->
         <div class="event">
             <div class="event-title">
                 <span class="event-date">15.02.2025</span>
                 Nova-Con
+            </div>
+             <div class="event-content">
+              <!-- Optional: Beschreibung hier einfügen -->
             </div>
             <div class="thumbnail-container">
                 <img src="25-02-15-Nova-Con/bild1.jpg" class="thumbnail" alt="Nova-Con">
@@ -193,84 +576,176 @@
                 <img src="25-02-15-Nova-Con/bild5.jpg" class="thumbnail" alt="Nova-Con">
             </div>
         </div>
-        
-        <!-- Neues Event: 25-03-18-24.-ST-Dinner-House-of-India -->
+
+        <!-- Event 14: 24. ST Dinner – House of India -->
         <div class="event">
             <div class="event-title">
                 <span class="event-date">18.03.2025</span>
                 24. STAR TREK Dinner – House of India
             </div>
+             <div class="event-content">
+              <!-- Optional: Beschreibung hier einfügen -->
+            </div>
             <div class="thumbnail-container">
                 <img src="25-03-18-24.-ST-Dinner-House-of-India/bild.jpg" class="thumbnail" alt="House of India">
             </div>
         </div>
-    </div>
 
+    </div> <!-- Ende .timeline -->
+
+    <!-- Modal-Bereich -->
     <div id="modal">
         <button id="modal-prev">🡄</button>
-        <img id="modal-content" src="" alt="Enlarged image">
+        <!-- Der Inhalt (Bild/Video) wird hier dynamisch eingefügt -->
+        <div id="modal-content"></div>
         <button id="modal-next">🡆</button>
         <button id="modal-close">×</button>
     </div>
-    
+
     <script>
         const modal = document.getElementById('modal');
-        const modalImg = document.getElementById('modal-content');
+        const modalContentContainer = document.getElementById('modal-content');
         const closeBtn = document.getElementById('modal-close');
         const prevBtn = document.getElementById('modal-prev');
         const nextBtn = document.getElementById('modal-next');
         const thumbnails = document.querySelectorAll('.thumbnail');
+        const videoContainers = document.querySelectorAll('.video-thumbnail-container'); // **NEU**
 
+        // Array zur Speicherung der Galerie-Objekte (Bilder und Videos) eines Events
         let currentGallery = [];
         let currentIndex = 0;
 
-        // Öffnet das Modal und initialisiert die Galerie
-        thumbnails.forEach(img => {
-            img.onclick = function() {
-                const gallery = this.closest('.thumbnail-container');
-                currentGallery = Array.from(gallery.querySelectorAll('.thumbnail')).map(img => img.src);
-                currentIndex = currentGallery.indexOf(this.src);
+        // Funktion zur Aktualisierung des Modal-Inhalts (Bild oder Video)
+        function updateModalContent() {
+            modalContentContainer.innerHTML = ''; // Alten Inhalt löschen
+            if (currentGallery.length === 0) return; // Nichts tun, wenn Galerie leer ist
 
-                modal.style.display = "block";
-                modalImg.src = this.src;
-            };
+            const currentItem = currentGallery[currentIndex];
+            if (!currentItem) return; // Sicherheitshalber
+
+            if (currentItem.type === 'video') {
+                const video = document.createElement('video');
+                video.src = currentItem.src;
+                video.controls = true; // Steuerelemente anzeigen
+                video.autoplay = true; // Automatisches Abspielen
+                // Styling wird durch CSS #modal-content video gehandhabt
+                modalContentContainer.appendChild(video);
+            } else {
+                const img = document.createElement('img');
+                img.src = currentItem.src;
+                img.alt = currentItem.alt || 'Galeriebild';
+                 // Styling wird durch CSS #modal-content img gehandhabt
+                modalContentContainer.appendChild(img);
+            }
+
+            // Buttons nur anzeigen, wenn mehr als ein Element vorhanden ist
+            prevBtn.style.display = currentGallery.length > 1 ? 'flex' : 'none';
+            nextBtn.style.display = currentGallery.length > 1 ? 'flex' : 'none';
+        }
+
+        // Funktion zum Öffnen des Modals
+        function openModal(clickedElement) {
+             // Finde den übergeordneten Thumbnail-Container des geklickten Elements
+            const container = clickedElement.closest('.thumbnail-container');
+            if (!container) return; // Sollte nicht passieren, aber sicher ist sicher
+
+             // Sammle alle Thumbnails (Bilder und Video-Thumbnails) in diesem Container
+            const galleryItems = container.querySelectorAll('.thumbnail');
+
+            // Erstelle die Galerie-Liste für dieses Event
+            currentGallery = Array.from(galleryItems).map(item => {
+                if (item.dataset.video) { // Prüfe, ob es ein Video-Thumbnail ist
+                    return { type: 'video', src: item.dataset.video, thumb: item.src, alt: item.alt };
+                } else {
+                    return { type: 'image', src: item.src, alt: item.alt };
+                }
+            });
+
+            // Finde den Index des geklickten Elements in der neu erstellten Galerie
+            if (clickedElement.dataset.video) { // Geklicktes Element ist ein Video-Thumbnail
+                currentIndex = currentGallery.findIndex(item => item.type === 'video' && item.src === clickedElement.dataset.video);
+            } else { // Geklicktes Element ist ein normales Bild-Thumbnail
+                currentIndex = currentGallery.findIndex(item => item.type === 'image' && item.src === clickedElement.src);
+            }
+
+            // Fallback, falls Index nicht gefunden wird (sollte nicht vorkommen)
+             if (currentIndex === -1) currentIndex = 0;
+
+            modal.style.display = "flex"; // Modal anzeigen
+            updateModalContent(); // Inhalt laden
+        }
+
+
+        // Klick-Handler für alle BILD-Thumbnails (nicht Video-Container)
+        thumbnails.forEach(thumb => {
+            // Stelle sicher, dass wir keinen Listener auf Thumbnails *innerhalb* von video-thumbnail-containern setzen,
+            // da diese separat behandelt werden.
+            if (!thumb.closest('.video-thumbnail-container')) {
+                 thumb.onclick = function() {
+                     openModal(this); // 'this' ist das geklickte img.thumbnail
+                 };
+            }
         });
 
-        // Schließt das Modal
+        // **NEU: Klick-Handler für die VIDEO-Thumbnail-CONTAINER**
+        // Wir setzen den Listener auf den Container, damit Klicks auf das Bild *oder* den (visuellen) Play-Button funktionieren.
+        videoContainers.forEach(container => {
+            container.onclick = function() {
+                const videoThumbnail = this.querySelector('.thumbnail'); // Finde das img.thumbnail im Container
+                if (videoThumbnail) {
+                    openModal(videoThumbnail); // Übergebe das img.thumbnail an die Öffnen-Funktion
+                }
+            }
+        });
+
+
+        // Schließen-Button
         closeBtn.onclick = function() {
             modal.style.display = "none";
+            // Stoppe Video beim Schließen, falls vorhanden
+            const videoElement = modalContentContainer.querySelector('video');
+            if (videoElement) {
+                videoElement.pause();
+                videoElement.src = ""; // Verhindert weiteres Laden im Hintergrund
+            }
+            modalContentContainer.innerHTML = ''; // Inhalt leeren
+            currentGallery = []; // Galerie zurücksetzen
         };
 
+        // Klick außerhalb des Inhalts schließt das Modal
         modal.onclick = function(event) {
+            // Schließe nur, wenn direkt auf den dunklen Hintergrund geklickt wird
             if (event.target === modal) {
-                modal.style.display = "none";
+                closeBtn.click(); // Simuliere Klick auf Schließen-Button
             }
         };
 
-        // Zeigt das vorherige Bild
+        // Zurück-Button
         prevBtn.onclick = function() {
             if (currentGallery.length > 0) {
                 currentIndex = (currentIndex - 1 + currentGallery.length) % currentGallery.length;
-                modalImg.src = currentGallery[currentIndex];
+                updateModalContent();
             }
         };
 
-        // Zeigt das nächste Bild
+        // Vorwärts-Button
         nextBtn.onclick = function() {
             if (currentGallery.length > 0) {
                 currentIndex = (currentIndex + 1) % currentGallery.length;
-                modalImg.src = currentGallery[currentIndex];
+                updateModalContent();
             }
         };
 
-        // Schließen mit der Escape-Taste
+        // Tastatursteuerung (Escape, Links, Rechts)
         document.addEventListener('keydown', function(event) {
-            if (event.key === "Escape") {
-                modal.style.display = "none";
-            } else if (event.key === "ArrowLeft") {
-                prevBtn.click();
-            } else if (event.key === "ArrowRight") {
-                nextBtn.click();
+             if (modal.style.display === "flex") { // Nur wenn Modal offen ist
+                 if (event.key === "Escape") {
+                    closeBtn.click();
+                 } else if (event.key === "ArrowLeft") {
+                    prevBtn.click();
+                 } else if (event.key === "ArrowRight") {
+                    nextBtn.click();
+                 }
             }
         });
     </script>
