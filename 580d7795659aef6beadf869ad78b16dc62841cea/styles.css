@@ -207,3 +207,33 @@
 	margin-left: 18px;
 	font-size: 0.9em;
 }
+
+/* Neu: Container für Video-Thumbnail */
+.video-thumbnail-container {
+    position: relative;
+    display: inline-block; /* damit es in der flex-Anordnung bleibt */
+}
+
+/* Neu: Play-Button über dem Video-Thumbnail */
+.video-play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;       /* Größe des Kreises */
+    height: 40px;
+    background-color: var(--lcars-orange); /* gelber Kreis */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Neu: Pfeil im Play-Button */
+.video-play-button::before {
+    content: '';
+    border-style: solid;
+    border-width: 10px 0 10px 16px; /* Pfeilform, hier evtl. noch feinjustieren */
+    border-color: transparent transparent transparent var(--lcars-turquoise); /* blauer Pfeil */
+    margin-left: 4px;
+}
