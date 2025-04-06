@@ -1,3 +1,4 @@
+        /* --- Grundlegende LCARS Variablen & Body Style --- */
         :root {
             --lcars-turquoise: #004142;
             --lcars-dark-turquoise: #004142;
@@ -5,235 +6,274 @@
             --lcars-black: #000000;
             --lcars-white: #FFFFFF;
         }
-        
+
+        html {
+             scroll-behavior: smooth;
+        }
+
         body {
             background: var(--lcars-black);
-		    color: var(--lcars-white);
+            color: var(--lcars-white);
             font-family: 'Arial', sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0; /* Remove default padding */
+            line-height: 1.6;
         }
 
-		.scrolling-background {
-			position: fixed;
-			bottom: 0;
-			right: 0;
-			width: 300px; /* Breite des Hintergrundbildes */
-			height: 200px; /* Höhe des Hintergrundbildes */
-			background-image: url('picard10vorne.jpg0');
-			background-size: contain;
-			background-repeat: no-repeat;
-			background-position: bottom right;
-
-			/* Transparenz-Gradient für rechte Seite */
-			-webkit-mask-image: linear-gradient(to right, black 70%, transparent 100%);
-			mask-image: linear-gradient(to right, black 70%, transparent 100%);
-
-			/* Optional: Übergangseffekt für sanfte Transparenz */
-			transition: opacity 0.3s ease;
-		}
-
-
-        .logo {
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto 40px;
-            display: block;
-        }
-
-        .timeline {
+        /* --- Allgemeiner Container für Abschnitte --- */
+        .content-section {
             max-width: 1200px;
-            margin: 0 auto;
-            position: relative;
-			background-color: rgba(0,0,0,0.8)}
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 50px;
-            width: 4px;
-            height: 100%;
-            background: var(--lcars-turquoise);
-            border-radius: 2px;
-        }
-
-        .event {
-	margin-top: 28px;
-	margin-right: 0;
-	margin-left: 0;
-	margin-bottom: 40px;
-	padding-left: 100px;
-	position: relative;
-	display: flex;
-	flex-direction: column;
-        }
-
-        .event::before {
-            content: '';
-            position: absolute;
-            left: 44px;
-            width: 16px;
-            height: 16px;
-            background: var(--lcars-orange);
-            border-radius: 50%;
-			margin-top: 8px;
-        }
-
-        .event-title {
-            font-size: 1.2em;
-            color: var(--lcars-white);
-            margin-bottom: 10px;
-            padding: 5px 15px;
-            background: var(--lcars-dark-turquoise);
-            border-radius: 20px;
-            display: inline-block;
-        }
-
-        .event-date {
-            color: var(--lcars-orange);
-            font-weight: bold;
-            margin-right: 10px;
-        }
-
-        .thumbnail-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 10px;
-            padding-left: 15px; /* Einheitliche Einrückung in allen Zeilen */
-}
-
-.tn1 { margin-left: 15px;}
-        .thumbnail {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border: 2px solid var(--lcars-turquoise);
+            margin: 40px auto;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.85);
             border-radius: 10px;
-            cursor: pointer;
-            transition: transform 0.2s;
+            position: relative;
+            z-index: 1;
+            scroll-margin-top: 70px; /* Adjusted for menu height */
+        }
+         /* Remove top margin for the first section after the menu */
+         #stammtisch {
+             margin-top: 20px;
+         }
+
+
+        /* --- Scrolling Hintergrundbild (ENTFERNT) --- */
+        /* .scrolling-background { ... } */
+
+        /* --- LCARS Header Bar Style --- */
+        .lcars-header-bar {
+            background-color: var(--lcars-turquoise); /* Blue */
+            padding: 5px 35px;
+            border-radius: 15px ;
+            margin: -20px -20px 20px -20px; /* Adapt to section padding */
+            text-align: right;
+            font-weight: bold;
+            color: var(--lcars-white); /* White text */
+            position: relative;
+            overflow: hidden;
+            font-size: 1.1em;
+        }
+        .lcars-header-bar::before {
+            content: ''; position: absolute; left: 15px; top: 5px; bottom: 5px; width: 10px;
+            background: var(--lcars-orange); border-radius: 5px;
+        }
+        .lcars-header-bar::after {
+             content: ''; position: absolute; right: 15px; top: 5px; bottom: 5px; width: 10px;
+             background: var(--lcars-orange); border-radius: 5px;
         }
 
-        .thumbnail:hover {
-            transform: scale(1.1);
-            border-color: var(--lcars-orange);
+        /* --- Hero/Titel Sektion --- */
+        .hero-section {
+             text-align: center;
+             padding: 20px;
+             background: var(--lcars-black);
+             margin: 0 auto;
+             max-width: none;
+         }
+         .hero-section .main-logo {
+            max-width: 600px;
+            width: 80%;
+            height: auto;
+            margin-bottom: 10px;
+         }
+
+        /* --- Hauptnavigationsmenü --- */
+        nav.main-menu {
+            background-color: var(--lcars-black); padding: 10px 0; text-align: center;
+            position: sticky; top: 0; z-index: 900;
+            border-bottom: 2px solid var(--lcars-turquoise);
+        }
+        nav.main-menu ul { list-style: none; padding: 0; margin: 0; display: inline-block; }
+        nav.main-menu li { display: inline-block; margin: 0 5px; }
+        nav.main-menu a {
+            color: var(--lcars-orange); text-decoration: none; font-size: 1.0em;
+            padding: 5px 8px;
+            border-radius: 15px; transition: background-color 0.3s, color 0.3s;
+        }
+        nav.main-menu a:hover, nav.main-menu a:focus { color: var(--lcars-black); background-color: var(--lcars-orange); }
+
+        /* --- Helper for SVG Bullets --- */
+        .svg-bullet {
+            width: 1em; /* Adjust size as needed */
+            height: 1em;
+            margin-right: 0.5em;
+            vertical-align: middle; /* Align with text */
         }
 
-        #modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 1000;
+        /* --- Stammtisch Sektion --- */
+        .stammtisch-section h2 { color: var(--lcars-orange); margin-bottom: 20px; }
+        .stammtisch-content { display: flex; flex-wrap: wrap; gap: 30px; align-items: center; }
+        .stammtisch-text { flex: 1; min-width: 300px; }
+        .stammtisch-text ul { list-style: none; padding-left: 0; }
+        .stammtisch-text li {
+            margin-bottom: 15px;
+            padding-left: 0; /* Remove default padding */
+            position: relative;
+            display: flex; /* Align icon and text */
+            align-items: baseline; /* Align baseline of icon and text */
+        }
+        .stammtisch-text li::before { /* Remove text bullet */
+            content: none;
+        }
+        .stammtisch-text li .svg-bullet { /* Style for the SVG icon */
+             margin-right: 0.6em; /* Space after icon */
+             flex-shrink: 0; /* Prevent icon from shrinking */
+             width: 1.2em; /* Icon size */
+             height: 1.2em;
+         }
+
+
+        /* --- Aktivitäten Sektion --- */
+        .activities-section h2 { color: var(--lcars-orange); margin-bottom: 20px; }
+        .activities-content { /* NEW: Flex container for list and image */
+            display: flex;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            gap: 30px;
+            align-items: flex-start; /* Align items at the top */
+        }
+        .activities-list { /* Container for the list */
+             flex: 1; /* Take available space */
+             min-width: 250px; /* Minimum width before wrapping */
+             padding-right: 20px; /* Space between list and image */
+        }
+        .activities-section ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 0; /* Remove default margin */
+            /* columns: 2; /* Removed for better control with flexbox */
+            /* gap: 20px; */
+         }
+        /* @media (max-width: 600px) { .activities-section ul { columns: 1; } } */
+        .activities-section li {
+            margin-bottom: 10px;
+            padding-left: 0; /* Remove default padding */
+            position: relative;
+            /* break-inside: avoid; */ /* Not needed with flexbox */
+            display: flex; /* Align icon and text */
+            align-items: baseline;
+        }
+         .activities-section li::before { /* Remove text bullet */
+            content: none;
+         }
+         .activities-section li .svg-bullet { /* Style for the SVG icon */
+             margin-right: 0.6em;
+             flex-shrink: 0;
+             width: 1.2em;
+             height: 1.2em;
+         }
+         .activities-image { /* Container for the collage */
+             flex: 1; /* Take available space */
+             min-width: 300px; /* Minimum width for the image area */
+             text-align: center;
+             /* margin-top: 20px; */ /* Removed, alignment handled by flex */
+         }
+         .activities-image img, .stammtisch-image img {
+             max-width: 100%; /* Make image responsive within its container */
+             height: auto;
+             border-radius: 10px;
+             border: 2px solid var(--lcars-turquoise);
+         }
+
+        /* --- Chronik Sektion --- */
+        .chronik-section h2 { color: var(--lcars-orange); margin-bottom: 20px; }
+        .timeline { margin: 0 auto; position: relative; background-color: transparent; padding-top: 20px; } /* Add padding top */
+        .timeline::before { content: ''; position: absolute; left: 50px; top: 20px; /* Adjust top offset */ width: 4px; height: calc(100% - 20px); /* Adjust height */ background: var(--lcars-turquoise); border-radius: 2px; }
+        .event { margin-bottom: 40px; padding-left: 80px; position: relative; display: flex; flex-direction: column; }
+        /* .event:first-child { margin-top: 20px; } /* No longer needed with timeline padding */
+        .event::before { content: ''; position: absolute; left: 44px; top: 11px; width: 16px; height: 16px; background: var(--lcars-orange); border-radius: 50%; z-index: 1; }
+        .event-title { font-size: 1.2em; color: var(--lcars-white); margin-bottom: 10px; padding: 5px 15px; background: var(--lcars-dark-turquoise); border-radius: 20px; display: inline-block; max-width: calc(100% - 30px); }
+        .event-date { color: var(--lcars-orange); font-weight: bold; margin-right: 10px; }
+        .event-content { font-size: 0.9em; line-height: 1.6; margin-top: 5px; margin-left: 10px;}
+        .thumbnail-container { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; margin-left: 10px;}
+        .thumbnail { width: 100px; height: 100px; object-fit: cover; border: 2px solid var(--lcars-turquoise); border-radius: 10px; cursor: pointer; transition: transform 0.2s, border-color 0.2s; }
+        .thumbnail:hover { transform: scale(1.1); border-color: var(--lcars-orange); }
+        .video-thumbnail-container { position: relative; display: inline-block; cursor: pointer; }
+        .video-play-button { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; background-color: rgba(244, 160, 7, 0.8); border-radius: 50%; display: flex; justify-content: center; align-items: center; pointer-events: none; transition: background-color 0.3s; }
+        .video-play-button::before { content: ''; border-style: solid; border-width: 10px 0 10px 16px; border-color: transparent transparent transparent var(--lcars-dark-turquoise); margin-left: 4px; }
+        .video-thumbnail-container:hover .video-play-button { background-color: rgba(244, 160, 7, 1); }
+
+        /* --- (First) Contact Sektion --- */
+        .contact-section h2 { color: var(--lcars-orange); margin-bottom: 20px; }
+        .contact-content { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 40px; } /* Renamed from cta-content */
+        .contact-text { font-size: 1.3em; flex-basis: 40%; min-width: 250px; text-align: left; } /* Renamed from cta-text */
+        .contact-text a { color: var(--lcars-orange); text-decoration: underline; } /* Style for the WhatsApp link */
+        .contact-text a:hover { color: var(--lcars-white); }
+        .contact-qr { flex-basis: 40%; min-width: 250px; text-align: center; position: relative; } /* Renamed from cta-qr */
+        .contact-qr img { max-width: 250px; width: 100%; height: auto; border: 4px solid var(--lcars-turquoise); border-radius: 10px; display: block; margin: 0 auto; }
+        .whatsapp-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60px; height: 60px; background-color: #25D366; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 30px; font-weight: bold; pointer-events: none; }
+        .whatsapp-icon svg { width: 35px; height: 35px; fill: white; }
+
+        /* --- Impressum Sektion (ENTFERNT) --- */
+        /* .impressum-section { ... } */
+
+
+        /* --- Modal-Styles --- */
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 1000; justify-content: center; align-items: center; flex-direction: column; }
+        #modal-content { max-width: 90vw; max-height: 80vh; display: flex; justify-content: center; align-items: center; position: relative; }
+        #modal-content img, #modal-content video { max-width: 100%; max-height: 100%; display: block; border: 2px solid var(--lcars-turquoise); border-radius: 10px; object-fit: contain; }
+        #modal-prev, #modal-next { position: absolute; top: 50%; transform: translateY(-50%); background: var(--lcars-dark-turquoise); color: var(--lcars-orange); border: none; font-size: 2em; padding: 0.5em; cursor: pointer; border-radius: 50%; width: 50px; height: 50px; line-height: 1; display: flex; justify-content: center; align-items: center; opacity: 0.7; transition: opacity 0.3s; z-index: 1001; }
+        #modal-prev:hover, #modal-next:hover { opacity: 1; }
+        #modal-prev { left: 2%; }
+        #modal-next { right: 2%; }
+        #modal-close { position: absolute; top: 1em; right: 1em; border: none; font-size: 2em; cursor: pointer; border-radius: 50%; background: var(--lcars-dark-turquoise); color: var(--lcars-orange); width: 40px; height: 40px; line-height: 1; display: flex; justify-content: center; align-items: center; padding: 0; opacity: 0.7; transition: opacity 0.3s; z-index: 1001; }
+        #modal-close:hover { opacity: 1; }
+
+        /* --- Footer --- */
+         footer {
+             text-align: center;
+             padding: 20px;
+             margin-top: 40px;
+             font-size: 0.9em;
+             color: #aaa;
+             border-top: 1px solid var(--lcars-turquoise); /* Optional: Trennlinie */
+         }
+         footer a {
+             color: var(--lcars-orange);
+             text-decoration: none;
+             margin: 0 10px; /* Abstand zwischen Links */
+         }
+         footer a:hover {
+             text-decoration: underline;
+         }
+
+
+        /* Top margin for the first section after the menu */
+         .datenschutz-section { /* Apply to the main content section here */
+            margin-top: 20px;
         }
 
-        #modal-content {
-            max-width: 90%;
-            max-height: 90%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-			border: 2px solid var(--lcars-turquoise);
-			border-radius: 20px;
-        }
 
-        #modal-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
+        /* --- Datenschutz Sektion (spezifische Styles hier) --- */
+        .datenschutz-section h2, .datenschutz-section h3 {
             color: var(--lcars-orange);
-            font-size: 30px;
-            cursor: pointer;
-            background: var(--lcars-dark-turquoise);
-            border: none;
-            padding: 10px;
+            margin-top: 1.5em;
+            margin-bottom: 0.8em;
+        }
+        .datenschutz-section h2 { font-size: 1.8em; }
+        .datenschutz-section h3 { font-size: 1.4em; }
+        .datenschutz-section p { margin-bottom: 1em; }
+        .datenschutz-section strong { color: var(--lcars-orange); } /* Hervorhebung */
+        .datenschutz-section ul {
+            list-style: disc; /* Standard-Aufzählungszeichen */
+            margin-left: 25px; /* Einrückung */
+            margin-bottom: 1em;
+        }
+        .datenschutz-section li { margin-bottom: 0.5em; }
+        .datenschutz-section a { color: var(--lcars-orange); text-decoration: underline; }
+        .datenschutz-section a:hover { color: var(--lcars-white); }
+
+
+        /* Top margin for the first section after the menu */
+         .impressum-section { /* Apply to the main content section here */
+            margin-top: 20px;
         }
 
 
-#modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: none;
-    background-color: rgba(0, 0, 0, 0.8);
-    justify-content: center;
-    align-items: center;
-}
 
-#modal-content {
-    max-width: 80%;
-    max-height: 80%;
-}
+        /* --- Impressum Sektion (spezifische Styles hier) --- */
+        .impressum-section h2 { color: var(--lcars-orange); margin-bottom: 20px; }
+        .impressum-section p { margin-bottom: 10px; }
+        .impressum-section strong { color: var(--lcars-orange); } /* Hervorhebung für Feldnamen */
+        .impressum-section em { color: #aaa; font-style: italic;} /* Hinweis-Text */
 
-#modal-prev,
-#modal-next {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: var(--lcars-dark-turquoise);
-    color: var(--lcars-orange);
-    border: none;
-    font-size: 2em;
-    padding: 0.5em;
-    cursor: pointer;
-	border-radius: 20px;
-}
 
-#modal-prev {
-    left: 5%;
-}
-
-#modal-next {
-    right: 5%;
-}
-
-#modal-close {
-    position: absolute;
-    top: 1em;
-    right: 1em;
-    border: none;
-    font-size: 2em;
-    cursor: pointer;
-	border-radius: 20px;
-}
-
-.event-content {
-	margin-left: 18px;
-	font-size: 0.9em;
-}
-
-/* Neu: Container für Video-Thumbnail */
-.video-thumbnail-container {
-    position: relative;
-    display: inline-block; /* damit es in der flex-Anordnung bleibt */
-}
-
-/* Neu: Play-Button über dem Video-Thumbnail */
-.video-play-button {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 40px;       /* Größe des Kreises */
-    height: 40px;
-    background-color: var(--lcars-orange); /* gelber Kreis */
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Neu: Pfeil im Play-Button */
-.video-play-button::before {
-    content: '';
-    border-style: solid;
-    border-width: 10px 0 10px 16px; /* Pfeilform, hier evtl. noch feinjustieren */
-    border-color: transparent transparent transparent var(--lcars-turquoise); /* blauer Pfeil */
-    margin-left: 4px;
-}
